@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "schemhelper",
+  "version": "${version}",
+  "name": "SchemHelper",
+  "description": "Auto-swaps the correct item into your hand based on the Litematica schematic block you are looking at.",
+  "authors": ["Thanh Binh"],
+  "contact": {},
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.thanhbinh.schemhelper.SchemHelperClient"
+    ]
+  },
+  "mixins": [],
+  "depends": {
+    "fabricloader": ">=0.18.0",
+    "minecraft": "1.21.11",
+    "fabric-api": "*",
+    "litematica": "*",
+    "malilib": "*"
+  }
+}
