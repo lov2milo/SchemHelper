@@ -19,6 +19,9 @@ repositories {
 			maven {
 				name = "Modrinth"
 				url = "https://api.modrinth.com/maven"
+				metadataSources {
+					artifact()
+				}
 			}
 		}
 		filter {
