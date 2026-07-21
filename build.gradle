@@ -1,68 +1,62 @@
 plugins {
-	id 'fabric-loom' version '1.14-SNAPSHOT'
-	id 'maven-publish'
+id 'fabric-loom' version '1.14-SNAPSHOT'
+id 'maven-publish'
 }
 
 version = project.mod_version
 group = project.maven_group
 
 base {
-	archivesName = project.archives_base_name
+archivesName = project.archives_base_name
 }
 
 repositories {
-	// Modrinth mirrors every mod's releases as a Maven repo. We only need
-	// MaLiLib and Litematica at compile time (they are NOT bundled into
-	// the output jar) so players must still install the real mods themselves.
-	exclusiveContent {
-		forRepository {
-			maven {
-				name = "Modrinth"
-				url = "https://api.modrinth.com/maven"
-				metadataSources {
-					artifact()
-				}
-			}
-		}
-		filter {
-			includeGroup "maven.modrinth"
-		}
-	}
+exclusiveContent {
+forRepository {
+maven {
+name = "Modrinth"
+url = "https://api.modrinth.com/maven"
+metadataSources {
+artifact()
+}
+}
+}
+filter {
+includeGroup "maven.modrinth"
+}
+}
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+minecraft "com.mojang:minecraft:${project.minecraft_version}"
+mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	// Compile-only: needed to reference Litematica/MaLiLib classes while
-	// building, but NOT shipped inside our jar and NOT loaded unless the
-	// player already has both mods installed.
-	modCompileOnly "maven.modrinth:malilib:${project.malilib_version}"
-	modCompileOnly "maven.modrinth:litematica:${project.litematica_version}"
+modCompileOnly "maven.modrinth:GcWjdA9I:APEEwSfs" // MaLiLib 0.27.8
+modCompileOnly "maven.modrinth:bEpr0Arc:b3dJnV8d" // Litematica 0.26.12
 }
 
 processResources {
-	inputs.property "version", project.version
+inputs.property "version", project.version
 
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
-	}
+filesMatching("fabric.mod.json") {
+expand "version": project.version
+}
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.encoding = "UTF-8"
-	it.options.release = 21
+it.options.encoding = "UTF-8"
+it.options.release = 21
 }
 
 java {
-	withSourcesJar()
+withSourcesJar()
 }
 
 jar {
-	from("LICENSE") {
-		rename { "${it}_${project.archivesBaseName}" }
-	}
+from("LICENSE") {
+rename { "${it}_${project.archivesBaseName}" }
+}
 }
