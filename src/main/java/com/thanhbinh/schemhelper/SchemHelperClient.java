@@ -1,6 +1,5 @@
 package com.thanhbinh.schemhelper;
 
-import fi.dy.masa.litematica.util.RayTraceUtils;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -11,13 +10,16 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.item.Item;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 import org.lwjgl.glfw.GLFW;
 
 public class SchemHelperClient implements ClientModInitializer {
 
-    /** How far (in blocks) to raycast into the schematic - matches typical player reach. */
     private static final double REACH_DISTANCE = 6.0;
+
+    private static final KeyBinding.Category CATEGORY =
+            KeyBinding.Category.create(Identifier.of("schemhelper", "main"));
 
     private static boolean enabled = false;
     private static KeyBinding toggleKey;
@@ -27,15 +29,14 @@ public class SchemHelperClient implements ClientModInitializer {
         toggleKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.schemhelper.toggle",
                 InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_UNKNOWN, // unbound by default - set in Controls menu
-                "category.schemhelper"
+                GLFW.GLFW_KEY_UNKNOWN,
+                CATEGORY
         ));
 
         ClientTickEvents.END_CLIENT_TICK.register(SchemHelperClient::onClientTick);
     }
 
     private static void onClientTick(MinecraftClient mc) {
-        // Handle the toggle keybind.
         while (toggleKey.wasPressed()) {
             enabled = !enabled;
             if (mc.player != null) {
@@ -50,8 +51,6 @@ public class SchemHelperClient implements ClientModInitializer {
             return;
         }
 
-        // Don't do anything while a GUI (inventory, chat, etc.) is open,
-        // to avoid interfering with the player's own clicks.
         if (mc.currentScreen != null) {
             return;
         }
@@ -68,7 +67,7 @@ public class SchemHelperClient implements ClientModInitializer {
 
         Item wantedItem = targetState.getBlock().asItem();
         if (wantedItem == net.minecraft.item.Items.AIR) {
-            return; // block has no direct item form (e.g. water, fire) - nothing to hold
+            return;
         }
 
         HotbarSwapper.ensureHolding(wantedItem);
