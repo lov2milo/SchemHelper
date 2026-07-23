@@ -3,7 +3,6 @@ package com.thanhbinh.schemhelper;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -37,7 +36,6 @@ public class SchemHelperClient implements ClientModInitializer {
         ));
 
         ClientTickEvents.END_CLIENT_TICK.register(SchemHelperClient::onClientTick);
-        WorldRenderEvents.START.register(context -> onFrame());
     }
 
     private static void onClientTick(MinecraftClient mc) {
@@ -50,14 +48,10 @@ public class SchemHelperClient implements ClientModInitializer {
                 );
             }
         }
-    }
 
-    private static void onFrame() {
         if (!enabled) {
             return;
         }
-
-        MinecraftClient mc = MinecraftClient.getInstance();
 
         if (mc.currentScreen != null) {
             return;
