@@ -37,8 +37,6 @@ public class SchemHelperClient implements ClientModInitializer {
     }
 
     private static void onClientTick(MinecraftClient mc) {
-        HotbarSwapper.tick();
-
         while (toggleKey.wasPressed()) {
             enabled = !enabled;
             if (mc.player != null) {

@@ -6,6 +6,7 @@ import fi.dy.masa.litematica.world.WorldSchematic;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 
 public final class SchematicTargetHelper {
