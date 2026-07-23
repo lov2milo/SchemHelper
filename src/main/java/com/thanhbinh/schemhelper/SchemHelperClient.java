@@ -24,8 +24,6 @@ public class SchemHelperClient implements ClientModInitializer {
     private static boolean enabled = false;
     private static KeyBinding toggleKey;
 
-    private static net.minecraft.util.math.BlockPos lastTargetPos = null;
-
     @Override
     public void onInitializeClient() {
         toggleKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
@@ -61,22 +59,15 @@ public class SchemHelperClient implements ClientModInitializer {
 
         ClientPlayerEntity player = mc.player;
         if (player == null || mc.world == null) {
-            lastTargetPos = null;
             return;
         }
 
         var wrapper = SchematicTargetHelper.getTargetedSchematicHit(player, REACH_DISTANCE);
         if (wrapper == null) {
-            lastTargetPos = null;
             return;
         }
 
         net.minecraft.util.math.BlockPos pos = wrapper.getBlockHitResult().getBlockPos();
-
-        if (pos.equals(lastTargetPos)) {
-            return;
-        }
-
         BlockState targetState = SchematicTargetHelper.resolveBlockState(pos);
         if (targetState == null || targetState.isAir()) {
             return;
@@ -87,8 +78,6 @@ public class SchemHelperClient implements ClientModInitializer {
             return;
         }
 
-        if (HotbarSwapper.ensureHolding(wantedItem)) {
-            lastTargetPos = pos;
-        }
+        HotbarSwapper.ensureHolding(wantedItem);
     }
 }
