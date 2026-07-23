@@ -18,6 +18,24 @@ public final class HotbarSwapper {
     private static final int MAIN_INV_START = 9;
     private static final int MAIN_INV_END = 36;
 
+    private static final int UNLOCK_GRACE_TICKS = 6;
+
+    private static boolean wasBreakingLastTick = false;
+    private static int unlockGraceRemaining = 0;
+
+    public static void tick() {
+        MinecraftClient mc = MinecraftClient.getInstance();
+        boolean breakingNow = mc.interactionManager != null && mc.interactionManager.isBreakingBlock();
+
+        if (wasBreakingLastTick && !breakingNow) {
+            unlockGraceRemaining = UNLOCK_GRACE_TICKS;
+        } else if (unlockGraceRemaining > 0) {
+            unlockGraceRemaining--;
+        }
+
+        wasBreakingLastTick = breakingNow;
+    }
+
     public static boolean ensureHolding(Item wantedItem) {
         if (wantedItem == null || isLocked(wantedItem)) {
             return false;
@@ -31,10 +49,7 @@ public final class HotbarSwapper {
 
         ItemStack mainHand = player.getMainHandStack();
 
-        // A locked item (pickaxe) is in hand - only leave it alone WHILE
-        // actively mining (attack button held / breaking in progress).
-        // The moment mining stops, auto-swap resumes right away.
-        if (!mainHand.isEmpty() && isLocked(mainHand.getItem()) && mc.interactionManager.isBreakingBlock()) {
+        if (!mainHand.isEmpty() && isLocked(mainHand.getItem()) && unlockGraceRemaining <= 0) {
             return false;
         }
 
