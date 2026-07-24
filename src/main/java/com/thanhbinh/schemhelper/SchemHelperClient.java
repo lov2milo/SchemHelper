@@ -81,11 +81,7 @@ public class SchemHelperClient implements ClientModInitializer {
             return ActionResult.PASS;
         }
 
-        if (clientPlayer.getMainHandStack().getItem() == wantedItem) {
-            return ActionResult.PASS;
-        }
-
         HotbarSwapper.ensureHolding(wantedItem);
-        return ActionResult.FAIL;
+        return ActionResult.PASS;
     }
 }
